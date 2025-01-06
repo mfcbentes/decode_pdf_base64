@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: decode_pdf_base64
+    env_file:
+      - .env
+    environment:
+      - LD_LIBRARY_PATH=/opt/oracle
+    networks:
+      - app-net
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    volumes:
+      - ./output:/app/output:rw
+    command: ["sh", "-c", "go run main.go && tail -f /dev/null"]
+networks:
+  app-net:
+    driver: bridge
