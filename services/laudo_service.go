@@ -18,6 +18,13 @@ func CreateLaudos() ([]string, error) {
 
 	var filePaths []string
 	for _, laudo := range laudos {
+		// Verificar se o arquivo já existe
+		filePath := fmt.Sprintf("/app/output/%d.pdf", laudo.NrAcessoDicom)
+		if _, err := os.Stat(filePath); err == nil {
+			slog.Info("Arquivo PDF já existe", slog.String("filePath", filePath))
+			continue
+		}
+
 		// Decodificar o Base64
 		pdfData, err := base64.StdEncoding.DecodeString(laudo.DsPdfSerial)
 		if err != nil {
@@ -26,7 +33,6 @@ func CreateLaudos() ([]string, error) {
 		}
 
 		// Salvar o PDF em um arquivo
-		filePath := fmt.Sprintf("/app/output/%d.pdf", laudo.NrAcessoDicom)
 		file, err := os.Create(filePath)
 		if err != nil {
 			slog.Error("Erro ao criar arquivo PDF", slog.String("filePath", filePath), slog.Any("error", err))
