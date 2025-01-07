@@ -9,7 +9,5 @@ func GenerateLaudos() {
 	_, err := services.CreateLaudos()
 	if err != nil {
 		slog.Error("Erro ao criar PDFs", slog.Any("error", err))
-	} else {
-		slog.Info("Laudos gerados com sucesso")
 	}
 }
