@@ -29,7 +29,18 @@ func setupLogging() {
 
 func main() {
 	setupLogging()
-	tasks.GenerateLaudosPeriodically()
+
+	// Executa a geração de laudos imediatamente na inicialização
+	tasks.GenerateLaudos()
+
+	ticker := time.NewTicker(10 * time.Minute)
+	defer ticker.Stop()
+
+	go func() {
+		for range ticker.C {
+			tasks.GenerateLaudos()
+		}
+	}()
 
 	http.HandleFunc("/laudo/", controllers.HandleLaudo)
 	slog.Info("Servidor iniciado na porta 8080")
