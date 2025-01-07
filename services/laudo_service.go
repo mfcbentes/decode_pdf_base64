@@ -21,7 +21,7 @@ func CreateLaudos() ([]string, error) {
 		// Verificar se o arquivo já existe
 		filePath := fmt.Sprintf("/app/output/%d.pdf", laudo.NrAcessoDicom)
 		if _, err := os.Stat(filePath); err == nil {
-			slog.Info("Arquivo PDF já existe", slog.String("filePath", filePath))
+			//slog.Info("Arquivo PDF já existe", slog.String("filePath", filePath))
 			continue
 		}
 
