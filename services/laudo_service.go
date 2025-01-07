@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"fmt"
 	"os"
+	"path/filepath"
+	"time"
 
 	"github.com/mfcbentes/decode_pdf_base64/repositories"
 	"golang.org/x/exp/slog"
@@ -51,4 +53,33 @@ func CreateLaudos() ([]string, error) {
 	}
 
 	return filePaths, nil
+}
+
+func RemoveOldPDFs() error {
+	outputDir := "/app/output"
+	files, err := os.ReadDir(outputDir)
+	if err != nil {
+		return fmt.Errorf("erro ao ler o diretório: %v", err)
+	}
+
+	now := time.Now()
+	for _, file := range files {
+		filePath := filepath.Join(outputDir, file.Name())
+		info, err := file.Info()
+		if err != nil {
+			slog.Error("Erro ao obter informações do arquivo", slog.String("filePath", filePath), slog.Any("error", err))
+			continue
+		}
+
+		if now.Sub(info.ModTime()).Hours() > 24 {
+			err := os.Remove(filePath)
+			if err != nil {
+				slog.Error("Erro ao remover arquivo", slog.String("filePath", filePath), slog.Any("error", err))
+			} else {
+				slog.Info("Arquivo removido com sucesso", slog.String("filePath", filePath))
+			}
+		}
+	}
+
+	return nil
 }

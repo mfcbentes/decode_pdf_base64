@@ -33,6 +33,7 @@ func main() {
 	// Executa a geração de laudos imediatamente na inicialização
 	tasks.GenerateLaudos()
 
+	// Configura um ticker para executar a geração de laudos a cada 10 minutos
 	ticker := time.NewTicker(10 * time.Minute)
 	defer ticker.Stop()
 
