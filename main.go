@@ -6,12 +6,11 @@ import (
 	"time"
 
 	"github.com/mfcbentes/decode_pdf_base64/controllers"
-	"github.com/mfcbentes/decode_pdf_base64/services"
+	"github.com/mfcbentes/decode_pdf_base64/tasks"
 	"golang.org/x/exp/slog"
 )
 
-func main() {
-	// Configurando o fuso horário para os logs
+func setupLogging() {
 	location, err := time.LoadLocation("America/Santarem")
 	if err != nil {
 		slog.Error("Erro ao carregar localização", slog.Any("error", err))
@@ -26,14 +25,13 @@ func main() {
 			return a
 		},
 	})))
+}
 
-	// Criação dos arquivos PDF na inicialização do programa
-	_, err = services.CreateLaudos()
-	if err != nil {
-		slog.Error("Erro ao criar PDFs", slog.Any("error", err))
-		os.Exit(1)
-	}
+func main() {
+	setupLogging()
+	tasks.GenerateLaudosPeriodically()
 
+	// Configuração do servidor HTTP
 	http.HandleFunc("/laudo/", controllers.HandleLaudo)
 	slog.Info("Servidor iniciado na porta 8080")
 	slog.Error("Erro no servidor HTTP", slog.Any("error", http.ListenAndServe(":8080", nil)))
