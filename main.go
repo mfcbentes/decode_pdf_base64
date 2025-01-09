@@ -43,6 +43,7 @@ func main() {
 		}
 	}()
 
+	http.HandleFunc("/", controllers.HandleStatus)
 	http.HandleFunc("/laudo/", controllers.HandleLaudo)
 	slog.Info("Servidor iniciado na porta 8080")
 	slog.Error("Erro no servidor HTTP", slog.Any("error", http.ListenAndServe(":8080", nil)))

@@ -71,7 +71,7 @@ func RemoveOldPDFs() error {
 			continue
 		}
 
-		if now.Sub(info.ModTime()).Hours() > 24 {
+		if now.Sub(info.ModTime()).Hours() > 72 {
 			err := os.Remove(filePath)
 			if err != nil {
 				slog.Error("Erro ao remover arquivo", slog.String("filePath", filePath), slog.Any("error", err))

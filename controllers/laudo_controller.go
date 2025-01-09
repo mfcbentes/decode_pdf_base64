@@ -36,3 +36,8 @@ func HandleLaudo(w http.ResponseWriter, r *http.Request) {
 
 	views.RenderPDF(w, r, filePath, sequence)
 }
+
+func HandleStatus(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("API on-line"))
+}
