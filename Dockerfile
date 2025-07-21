@@ -1,12 +1,13 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y \
-    libaio1 \
+    libaio-dev \
     gcc \
     libc6-dev \
     wget \
     unzip \
     tar \
+    && ln -s /usr/lib/x86_64-linux-gnu/libaio.so /usr/lib/x86_64-linux-gnu/libaio.so.1 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/oracle && \
